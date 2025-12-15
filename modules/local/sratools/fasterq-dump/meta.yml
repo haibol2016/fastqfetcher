@@ -1,0 +1,51 @@
+name: sra_fasterqdump
+description: |
+  Convert SRA files to compressed FASTQ format using fasterq-dump.
+  Supports both single-end and paired-end reads. Uses pigz for parallel compression.
+keywords:
+  - sra
+  - fastq
+  - fasterq-dump
+  - conversion
+  - sequencing
+  - compression
+tools:
+  - sra-tools:
+      description: SRA Toolkit - Tools for working with NCBI Sequence Read Archive data
+      homepage: https://github.com/ncbi/sra-tools
+      documentation: https://github.com/ncbi/sra-tools/wiki
+      tool_dev_url: https://github.com/ncbi/sra-tools
+      licence: ['Public Domain']
+  - pigz:
+      description: Parallel gzip - a parallel implementation of gzip for modern multi-processor machines
+      homepage: https://zlib.net/pigz/
+      documentation: https://zlib.net/pigz/
+      tool_dev_url: https://github.com/madler/pigz
+      licence: ['zlib']
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'SRR123456', sra_id:'SRR123456' ]
+  - sra_file:
+      type: file
+      description: SRA file to convert (.sra format)
+      pattern: "*.sra"
+output:
+  - fastq_files:
+      type: file
+      description: |
+        Tuple containing metadata and compressed FASTQ file(s) (.fastq.gz).
+        Format: [meta, fastq_file(s)]
+        For single-end reads: one file (e.g., SRR123456.fastq.gz).
+        For paired-end reads: two files (e.g., SRR123456_1.fastq.gz and SRR123456_2.fastq.gz).
+      pattern: "*.fastq.gz"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@haiboliu"
+
+

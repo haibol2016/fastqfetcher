@@ -1,0 +1,94 @@
+nextflow_process {
+
+    name "Test Process SRA_FASTERQDUMP"
+    script "../main.nf"
+    process "SRA_FASTERQDUMP"
+
+    tag "modules"
+    tag "modules_local"
+    tag "fasterq_dump"
+
+    setup { 
+        run("SRA_PREFETCH") {
+            script "../../prefetch/main.nf"
+            process {
+                """
+                input[0] = Channel.of([ [id: "SRR13255544", sra_id: "SRR13255544"], "SRR13255544" ])    // tuple val(meta), val(sra_id)
+                """
+            }
+        }
+    }
+
+    test("fasterq-dump single-end - stub") {
+
+        options "-stub"
+        when {
+            process {
+                """
+                input[0] = SRA_PREFETCH.out.sra_files // sra_file
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("fasterq-dump paired-end with split_files - stub") {
+
+        options "-stub"
+        when {
+            process {
+                """
+                input[0] = SRA_PREFETCH.out.sra_files // sra_file
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("fasterq-dump with single-end sra file") {
+        when {
+            process {
+                """
+                input[0] =  SRA_PREFETCH.out.sra_files  // sra_file
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("fasterq-dump with paired-end sra file") {
+        when {
+            process {
+                """
+                input[0] = SRA_PREFETCH.out.sra_files // sra_file
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+}
+

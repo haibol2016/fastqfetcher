@@ -1,0 +1,62 @@
+{
+    "prefetch SRA file - real run": {
+        "content": [
+            {
+                "0": [
+                    "SRR13255544.sra:md5,466d05dafb2eec672150754168010b4d"
+                ],
+                "1": [
+                    "versions.yml:md5,68b329da9893e34099c7d8ad5cb9c940"
+                ],
+                "sra_files": [
+                    "SRR13255544.sra:md5,466d05dafb2eec672150754168010b4d"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-13T17:49:04.730818"
+    },
+    "prefetch SRA file with max_size - stub": {
+        "content": [
+            {
+                "0": [
+                    "SRR13255544.sra:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,953a3a2c2202a09abd67a32d0ab5f3e5"
+                ],
+                "sra_files": [
+                    "SRR13255544.sra:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-13T17:48:54.468085"
+    },
+    "prefetch SRA file - stub": {
+        "content": [
+            {
+                "0": [
+                    "SRR13255544.sra:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,953a3a2c2202a09abd67a32d0ab5f3e5"
+                ],
+                "sra_files": [
+                    "SRR13255544.sra:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-13T17:48:49.611283"
+    }
+}
