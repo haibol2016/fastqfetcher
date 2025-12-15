@@ -59,7 +59,7 @@ workflow {
     if (params.input.contains(',')) {
         // Comma-separated string of SRA IDs
         def ids = params.input.tokenize(',').collect { id -> id.trim() }
-        sra_ids_ch = channel.of(ids)
+        sra_ids_ch = channel.fromList(ids)
     } else {
         // Try to treat as file path (one SRA ID per line)
         def input_path = file(params.input)

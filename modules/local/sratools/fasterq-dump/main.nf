@@ -36,7 +36,7 @@ process SRA_FASTERQDUMP {
     fasterq-dump \\
         ${sra_file} \\
         -e ${task.cpus} \\
-        --split-spot \\
+        --split-files \\
         --temp \${TMPDIR:-/tmp} \\
         --outdir . \\
         ${args1}
@@ -65,8 +65,8 @@ process SRA_FASTERQDUMP {
     # Get version information
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-    fasterq-dump: \$( fasterq-dump --version | sed -e "s/fasterq-dump, version //g" )
-    pigz: \$( pigz --version | sed -e "s/pigz //g" )
+        fasterq-dump: \$(echo \$(fasterq-dump --version) | sed -e "s/fasterq-dump : //g" )
+        pigz: \$(echo \$(pigz --version) | sed -e "s/pigz //g" )
     END_VERSIONS
     """
 
@@ -77,8 +77,8 @@ process SRA_FASTERQDUMP {
     
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-    fasterq-dump: \$( fasterq-dump --version 2>/dev/null | sed -e "s/fasterq-dump, version //g" || echo "unknown" )
-    pigz: \$( pigz --version 2>/dev/null | sed -e "s/pigz //g" || echo "unknown" )
+        fasterq-dump: \$(echo \$(fasterq-dump --version) | sed -e "s/fasterq-dump : //g" )
+        pigz: \$(echo \$(pigz --version) | sed -e "s/pigz //g" )
     END_VERSIONS
     """
 }

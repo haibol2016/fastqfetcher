@@ -14,14 +14,9 @@
             "properties": {
                 "input": {
                     "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/fastqfetcher/usage#samplesheet-input).",
-                    "fa_icon": "fas fa-file-csv"
+                    "description": "SRA accession ID(s) or path to file containing SRA IDs. Can be: (1) Single SRA ID (e.g., SRR123456), (2) Comma-separated SRA IDs (e.g., SRR123456,SRR123457), or (3) Path to file with one SRA ID per line.",
+                    "help_text": "Input can be a single SRA ID (e.g., SRR123456), multiple comma-separated SRA IDs (e.g., SRR123456,SRR123457), or a file path containing one SRA ID per line. The pipeline will download and convert these SRA files to FASTQ format.",
+                    "fa_icon": "fas fa-download"
                 },
                 "outdir": {
                     "type": "string",
@@ -40,6 +35,44 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                }
+            }
+        },
+        "sra_toolkit_options": {
+            "title": "SRA Toolkit options",
+            "type": "object",
+            "fa_icon": "fas fa-download",
+            "description": "Options for SRA Toolkit tools (prefetch and fasterq-dump).",
+            "properties": {
+                "ngc_path": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to dbGaP repository key (.ngc file) for downloading controlled-access data.",
+                    "help_text": "Required for downloading controlled-access SRA data from dbGaP. Download your repository key from dbGaP and provide the path to the .ngc file.",
+                    "fa_icon": "fas fa-key"
+                },
+                "disk_limit": {
+                    "type": "string",
+                    "description": "Disk space limit for fasterq-dump (e.g., '50G', '100G'). Default: memory size allocated to the process.",
+                    "help_text": "Maximum disk space that fasterq-dump can use during conversion. If not specified, defaults to the memory size allocated to the process.",
+                    "fa_icon": "fas fa-hdd",
+                    "pattern": "^\\d+(\\.\\d+)?\\s*(K|M|G|T)?B?$"
+                },
+                "pgzip_compress_level": {
+                    "type": "string",
+                    "description": "Compression level for pigz (1-9). Higher values = better compression but slower. Default: 5.",
+                    "help_text": "Controls the compression level for pigz when compressing FASTQ files. Range: 1 (fastest, least compression) to 9 (slowest, best compression).",
+                    "fa_icon": "fas fa-compress",
+                    "pattern": "^[1-9]$",
+                    "default": "5"
+                },
+                "max_size": {
+                    "type": "string",
+                    "description": "Maximum size for prefetch download (e.g., '20G', '50G'). Default: 20G.",
+                    "help_text": "Maximum size limit for prefetch downloads. Prefetch will stop if the download exceeds this size.",
+                    "fa_icon": "fas fa-weight-hanging",
+                    "pattern": "^\\d+(\\.\\d+)?\\s*(K|M|G|T)?B?$",
+                    "default": "20G"
                 }
             }
         },
@@ -191,18 +224,42 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
-                    "hidden": true
+                    "help_text": "Path to a custom MultiQC configuration YAML file. See MultiQC documentation for configuration options.",
+                    "fa_icon": "fas fa-cog"
                 },
                 "multiqc_logo": {
                     "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image",
-                    "hidden": true
+                    "format": "file-path",
+                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file.",
+                    "help_text": "Path to a custom logo image file (PNG, SVG, etc.) to display in the MultiQC report. The logo file name must also be referenced in the MultiQC config file.",
+                    "fa_icon": "fas fa-image"
+                },
+                "extra_multiqc_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Additional MultiQC config file (can be used alongside multiqc_config).",
+                    "help_text": "Path to an additional MultiQC configuration file. This can be used to supplement or override settings from the main multiqc_config file.",
+                    "fa_icon": "fas fa-cog"
+                },
+                "replace_names": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "TSV file for replacing sample names in MultiQC report.",
+                    "help_text": "Path to a TSV file with two columns (old_name, new_name) to replace sample names in the MultiQC report.",
+                    "fa_icon": "fas fa-exchange-alt"
+                },
+                "sample_names": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "TSV file for custom sample names in MultiQC report.",
+                    "help_text": "Path to a TSV file mapping sample IDs to custom names for display in the MultiQC report.",
+                    "fa_icon": "fas fa-tags"
                 },
                 "multiqc_methods_description": {
                     "type": "string",
+                    "format": "file-path",
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
+                    "help_text": "Path to a YAML file containing HTML content for a methods description section in the MultiQC report.",
                     "fa_icon": "fas fa-cog"
                 },
                 "validate_params": {
@@ -231,6 +288,9 @@
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/sra_toolkit_options"
         },
         {
             "$ref": "#/$defs/reference_genome_options"

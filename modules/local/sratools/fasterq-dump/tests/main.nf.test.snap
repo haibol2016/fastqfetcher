@@ -1,0 +1,130 @@
+{
+    "fasterq-dump with single-end sra file": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,f38cb22a70bc51690cbf3b3cda06514f"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,ebff2837bd20829b5dffba1e2fba5158"
+                ],
+                "fastq_files": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,f38cb22a70bc51690cbf3b3cda06514f"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-15T07:37:28.785103"
+    },
+    "fasterq-dump paired-end with split_files - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,926a21b75ff2ae9c6bfed526fd928331"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,ebff2837bd20829b5dffba1e2fba5158"
+                ],
+                "fastq_files": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,926a21b75ff2ae9c6bfed526fd928331"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-15T07:37:18.926921"
+    },
+    "fasterq-dump single-end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,926a21b75ff2ae9c6bfed526fd928331"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,ebff2837bd20829b5dffba1e2fba5158"
+                ],
+                "fastq_files": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,926a21b75ff2ae9c6bfed526fd928331"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-15T07:37:13.792418"
+    },
+    "fasterq-dump with paired-end sra file": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,f38cb22a70bc51690cbf3b3cda06514f"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,ebff2837bd20829b5dffba1e2fba5158"
+                ],
+                "fastq_files": [
+                    [
+                        {
+                            "id": "SRR13255544",
+                            "sra_id": "SRR13255544"
+                        },
+                        "SRR13255544.fastq.gz:md5,f38cb22a70bc51690cbf3b3cda06514f"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-15T07:37:44.027642"
+    }
+}

@@ -1,0 +1,1 @@
+/Users/haiboliu/nf-core-fastqfetcher/work/46/6177fca6a75cec254a32401b6fcd5c/SRR36432525.sra

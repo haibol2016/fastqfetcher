@@ -1,0 +1,59 @@
+N E X T F L O W  ~  version 25.10.2
+Launching `main.nf` [hungry_boltzmann] DSL2 - revision: 2430636568
+
+------------------------------------------------------
+                                        ,--./,-.
+        ___     __   __   __   ___     /,-._.--~'
+  |\ | |__  __ /  ` /  \ |__) |__         }  {
+  | \| |       \__, \__/ |  \ |___     \`-._,-`-,
+                                        `._,._,'
+  nf-core/fastqfetcher 1.0.0dev
+------------------------------------------------------
+[1mInput/output options[0m
+  [0;34minput              : [0;32mSRR13255544[0m
+  [0;34moutdir             : [0;32m./test_results[0m
+
+[1mGeneric options[0m
+  [0;34mtrace_report_suffix: [0;32m2025-12-15_10-24-31[0m
+
+[1mCore Nextflow options[0m
+  [0;34mrunName            : [0;32mhungry_boltzmann[0m
+  [0;34mcontainerEngine    : [0;32mdocker[0m
+  [0;34mlaunchDir          : [0;32m/Users/haiboliu/nf-core-fastqfetcher[0m
+  [0;34mworkDir            : [0;32m/Users/haiboliu/nf-core-fastqfetcher/work[0m
+  [0;34mprojectDir         : [0;32m/Users/haiboliu/nf-core-fastqfetcher[0m
+  [0;34muserName           : [0;32mhaiboliu[0m
+  [0;34mprofile            : [0;32mdocker[0m
+  [0;34mconfigFiles        : [0;32m/Users/haiboliu/.nextflow/config, /Users/haiboliu/nf-core-fastqfetcher/nextflow.config[0m
+
+!! Only displaying parameters that differ from the pipeline defaults !!
+-[2m----------------------------------------------------[0m-
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/fastqfetcher/blob/master/CITATIONS.md
+
+WARN: The following invalid input values have been detected:
+
+* --publish_dir_mode: copy
+* --pipelines_testdata_base_path: https://raw.githubusercontent.com/nf-core/test-datasets/
+* --input: SRR13255544
+* --validate_params: true
+* --custom_config_base: https://raw.githubusercontent.com/nf-core/configs/master
+* --igenomes_base: s3://ngi-igenomes/igenomes/
+* --trace_report_suffix: 2025-12-15_10-24-31
+* --max_multiqc_email_size: 25.MB
+* --custom_config_version: master
+* --outdir: ./test_results
+
+
+ERROR ~ Validation of pipeline parameters failed!
+
+ -- Check '.nextflow.log' file for details
+[0;31mThe following invalid input values have been detected:
+
+* --input (SRR13255544): "SRR13255544" does not match regular expression [^\S+\.csv$]
+* --input (SRR13255544): the file or directory 'SRR13255544' does not exist
+[0m
+ -- Check script 'subworkflows/nf-core/utils_nfschema_plugin/main.nf' at line: 39 or see '.nextflow.log' file for more details

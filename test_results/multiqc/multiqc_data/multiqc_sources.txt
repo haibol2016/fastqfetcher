@@ -1,0 +1,8 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	SRR13255544	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/3/SRR13255544_fastqc.zip
+FastQC	all_sections	SRR33368650_1	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/4/SRR33368650_1_fastqc.zip
+FastQC	all_sections	SRR33368650_2	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/5/SRR33368650_2_fastqc.zip
+FastQC	all_sections	SRR36432525_1	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/6/SRR36432525_1_fastqc.zip
+FastQC	all_sections	SRR36432525_2	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/7/SRR36432525_2_fastqc.zip
+FastQC	all_sections	SRR36447178_1	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/1/SRR36447178_1_fastqc.zip
+FastQC	all_sections	SRR36447178_2	/Users/haiboliu/nf-core-fastqfetcher/work/46/babef3e6379c1d1549049149d86376/2/SRR36447178_2_fastqc.zip

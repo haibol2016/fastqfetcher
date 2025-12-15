@@ -13,7 +13,7 @@ process FASTQC {
     output:
     tuple val(meta), path("*.html"), emit: html
     tuple val(meta), path("*.zip") , emit: zip
-    path  "versions.yml"           , emit: versions
+    path  "versions.yml"           , topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,7 +22,8 @@ process FASTQC {
     def args          = task.ext.args ?: ''
     def prefix        = task.ext.prefix ?: "${meta.id}"
     // Make list of old name and new name pairs to use for renaming in the bash while loop
-    def old_new_pairs = reads instanceof Path || reads.size() == 1 ? [[ reads, "${prefix}.${reads.extension}" ]] : reads.withIndex().collect { entry, index -> [ entry, "${prefix}_${index + 1}.${entry.extension}" ] }
+    def old_new_pairs = (reads instanceof Path || reads.size() == 1 ? [[ reads, "${prefix}.${reads.extension}" ]] : 
+                           reads.withIndex().collect { entry, index -> [ entry, "${prefix}_${index + 1}.${entry.extension}" ] }) 
     def rename_to     = old_new_pairs*.join(' ').join(' ')
     def renamed_files = old_new_pairs.collect{ _old_name, new_name -> new_name }.join(' ')
 
@@ -46,7 +47,7 @@ process FASTQC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        fastqc: \$( fastqc --version | sed '/FastQC v/!d; s/.*v//' )
+        fastqc: \$(echo \$(fastqc --version) | sed '/FastQC v/!d; s/.*v//' )
     END_VERSIONS
     """
 
@@ -58,7 +59,7 @@ process FASTQC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        fastqc: \$( fastqc --version | sed '/FastQC v/!d; s/.*v//' )
+        fastqc: \$(echo \$(fastqc --version) | sed '/FastQC v/!d; s/.*v//' )
     END_VERSIONS
     """
 }

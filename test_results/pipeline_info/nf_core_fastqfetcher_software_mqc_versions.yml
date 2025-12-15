@@ -1,0 +1,12 @@
+FASTQC:
+  fastqc: 0.12.1
+MULTIQC:
+  multiqc: 1.29
+SRA_FASTERQDUMP:
+  fasterq-dump: 3.2.1
+  pigz: 2.8
+SRA_PREFETCH:
+  prefetch: 3.2.1
+Workflow:
+    nf-core/fastqfetcher: v1.0.0dev
+    Nextflow: 25.10.2

@@ -10,7 +10,6 @@
 process SRA_PREFETCH {
     tag "${meta.id}"
     label 'process_medium'
-    //publishDir "${params.outdir}/sra_prefetch", mode: 'copy', pattern: '*.sra'
 
     // Conda environment or container
     conda "${moduleDir}/environment.yml"
@@ -51,7 +50,10 @@ process SRA_PREFETCH {
     fi
     
     # Get version information
-    prefetch --version 2>&1 | head -n 1 > versions.yml || echo "SRA Toolkit version unknown" > versions.yml
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        prefetch: \$(echo \$(prefetch --version) | sed -e "s/prefetch : //g" )
+    END_VERSIONS
     """
 
     stub:
@@ -60,7 +62,7 @@ process SRA_PREFETCH {
     
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        prefetch: \$( prefetch --version | sed -e "s/prefetch, version //g" )
+        prefetch: \$(echo \$(prefetch --version) | sed -e "s/prefetch : //g" )
     END_VERSIONS
     """
 }

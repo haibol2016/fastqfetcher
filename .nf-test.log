@@ -1,0 +1,27 @@
+Dec-15 08:10:37.603 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.3
+Dec-15 08:10:37.610 [main] INFO  com.askimed.nf.test.App - Arguments: [test, modules/local/sratools/fasterq-dump/tests/main.nf.test]
+Dec-15 08:10:38.082 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.2
+Dec-15 08:10:38.083 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /Users/haiboliu/nf-core-fastqfetcher/nf-test.config...
+Dec-15 08:10:38.285 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/haiboliu/nf-core-fastqfetcher/subworkflows/local/sra2fastq.nf: Dependency '/Users/haiboliu/nf-core-fastqfetcher/subworkflows/local/../../../modules/local/sratools/prefetch/main.nf.nf' not found.
+Dec-15 08:10:38.285 [main] WARN  com.askimed.nf.test.nextflow.NextflowScript - Module /Users/haiboliu/nf-core-fastqfetcher/subworkflows/local/sra2fastq.nf: Dependency '/Users/haiboliu/nf-core-fastqfetcher/subworkflows/local/../../../modules/local/sratools/fasterq-dump/main.nf.nf' not found.
+Dec-15 08:10:38.377 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 17 files from directory /Users/haiboliu/nf-core-fastqfetcher in 0.096 sec
+Dec-15 08:10:38.378 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Dec-15 08:10:38.378 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/Users/haiboliu/nf-core-fastqfetcher/modules/local/sratools/fasterq-dump/tests/main.nf.test]
+Dec-15 08:10:38.453 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 4 tests to execute.
+Dec-15 08:10:38.453 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Dec-15 08:10:38.453 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Process SRA_FASTERQDUMP' from file '/Users/haiboliu/nf-core-fastqfetcher/modules/local/sratools/fasterq-dump/tests/main.nf.test'.
+Dec-15 08:10:38.454 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'd2f09ad8: fasterq-dump single-end - stub'. type: com.askimed.nf.test.lang.process.ProcessTest
+Dec-15 08:10:45.590 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Load snapshots from file '/Users/haiboliu/nf-core-fastqfetcher/modules/local/sratools/fasterq-dump/tests/main.nf.test.snap'
+Dec-15 08:10:45.597 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'fasterq-dump single-end - stub' match.
+Dec-15 08:10:45.597 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'd2f09ad8: fasterq-dump single-end - stub' finished. status: PASSED
+Dec-15 08:10:45.598 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '886527f9: fasterq-dump paired-end with split_files - stub'. type: com.askimed.nf.test.lang.process.ProcessTest
+Dec-15 08:10:51.082 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'fasterq-dump paired-end with split_files - stub' match.
+Dec-15 08:10:51.082 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '886527f9: fasterq-dump paired-end with split_files - stub' finished. status: PASSED
+Dec-15 08:10:51.082 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'bdbeeba2: fasterq-dump with single-end sra file'. type: com.askimed.nf.test.lang.process.ProcessTest
+Dec-15 08:11:00.595 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'fasterq-dump with single-end sra file' match.
+Dec-15 08:11:00.595 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'bdbeeba2: fasterq-dump with single-end sra file' finished. status: PASSED
+Dec-15 08:11:00.595 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '8ed38ac6: fasterq-dump with paired-end sra file'. type: com.askimed.nf.test.lang.process.ProcessTest
+Dec-15 08:11:09.941 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'fasterq-dump with paired-end sra file' match.
+Dec-15 08:11:09.941 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '8ed38ac6: fasterq-dump with paired-end sra file' finished. status: PASSED
+Dec-15 08:11:09.941 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Process SRA_FASTERQDUMP' finished. snapshot file: true, skipped tests: false, failed tests: false
+Dec-15 08:11:09.942 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 4 tests. 0 tests failed. Done!

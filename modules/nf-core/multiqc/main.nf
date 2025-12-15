@@ -2,23 +2,21 @@ process MULTIQC {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/multiqc:1.29--pyhdfd78af_0' :
-        'biocontainers/multiqc:1.29--pyhdfd78af_0' }"
+    container "docker.io/nemat1976/multiqc:1.29"
 
     input:
     path  multiqc_files, stageAs: "?/*"
-    path(multiqc_config)
-    path(extra_multiqc_config)
-    path(multiqc_logo)
-    path(replace_names)
-    path(sample_names)
+    path multiqc_config
+    path extra_multiqc_config     // optional, use [] as placeholder if not provided
+    path multiqc_logo            // optional, use [] as placeholder if not provided
+    path replace_names           // optional, use [] as placeholder if not provided
+    path sample_names            // optional, use [] as placeholder if not provided
 
     output:
     path "*multiqc_report.html", emit: report
     path "*_data"              , emit: data
     path "*_plots"             , optional:true, emit: plots
-    path "versions.yml"        , emit: versions
+    path "versions.yml"        , topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -45,7 +43,7 @@ process MULTIQC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        multiqc: \$( multiqc --version | sed -e "s/multiqc, version //g" )
+        multiqc: \$(echo \$(multiqc --version) | sed -e "s/multiqc, version //g" )
     END_VERSIONS
     """
 
@@ -57,7 +55,7 @@ process MULTIQC {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        multiqc: \$( multiqc --version | sed -e "s/multiqc, version //g" )
+        multiqc: \$(echco \$(multiqc --version) | sed -e "s/multiqc, version //g" )
     END_VERSIONS
     """
 }
