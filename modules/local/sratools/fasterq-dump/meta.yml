@@ -1,7 +1,8 @@
 name: sra_fasterqdump
 description: |
   Convert SRA files to compressed FASTQ format using fasterq-dump.
-  Supports both single-end and paired-end reads. Uses pigz for parallel compression.
+  Supports single-end (1 file), paired-end (2 files), and single-cell RNA-seq (2-4 files).
+  Uses pigz for parallel compression.
 keywords:
   - sra
   - fastq
@@ -40,6 +41,7 @@ output:
         Format: [meta, fastq_file(s)]
         For single-end reads: one file (e.g., SRR123456.fastq.gz).
         For paired-end reads: two files (e.g., SRR123456_1.fastq.gz and SRR123456_2.fastq.gz).
+        For single-cell RNA-seq: 2-4 files (e.g., SRR123456_1.fastq.gz through SRR123456_4.fastq.gz).
       pattern: "*.fastq.gz"
   - versions:
       type: file

@@ -1,91 +1,100 @@
-#!/usr/bin/env nextflow
 /*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/fastqfetcher
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/fastqfetcher
-    Website: https://nf-co.re/fastqfetcher
-    Slack  : https://nfcore.slack.com/channels/fastqfetcher
-----------------------------------------------------------------------------------------
-*/
+ * Complete SRA workflow: Download and convert to FASTQ.gz
+ * 
+ * Usage:
+ *   # Single SRA ID (as string)
+ *   nextflow run main.nf --input SRR123456
+ * 
+ *   # Multiple SRA IDs (comma-separated string)
+ *   nextflow run main.nf --input SRR123456,SRR123457,SRR123458
+ * 
+ *   # From file (one SRA ID per line)
+ *   nextflow run main.nf --input sra_ids.txt
+ * 
+ *   # With custom options
+ *   nextflow run main.nf --input SRR123456 --outdir ./results
+ */
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+nextflow.enable.dsl=2
 
-include { FASTQFETCHER  } from './workflows/fastqfetcher'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_fastqfetcher_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_fastqfetcher_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_fastqfetcher_pipeline'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
-workflow NFCORE_FASTQFETCHER {
-
-    take:
-    samplesheet // channel: samplesheet read in from --input
-
-    main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
-    FASTQFETCHER (
-        samplesheet
-    )
-    emit:
-    multiqc_report = FASTQFETCHER.out.multiqc_report // channel: /path/to/multiqc_report.html
-}
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+include { FASTQFETCHER } from './workflows/fastqfetcher.nf'
+include { PIPELINE_COMPLETION } from './subworkflows/local/utils'
+include { UTILS_NFSCHEMA_PLUGIN } from './subworkflows/nf-core/utils_nfschema_plugin'
+include { UTILS_NFCORE_PIPELINE } from './subworkflows/nf-core/utils_nfcore_pipeline'
+include { UTILS_NEXTFLOW_PIPELINE } from './subworkflows/nf-core/utils_nextflow_pipeline'
 
 workflow {
-
-    main:
+    
     //
-    // SUBWORKFLOW: Run initialisation tasks
+    // PIPELINE INITIALISATION
+    // Handles version printing, parameter validation, and config checking
+    // Note: We skip samplesheet processing since we use SRA IDs instead
     //
-    PIPELINE_INITIALISATION (
+    
+    // Print version and exit if required and dump pipeline parameters to JSON file
+    UTILS_NEXTFLOW_PIPELINE (
         params.version,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
+        true,
         params.outdir,
-        params.input
+        workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
+    
+    // Validate parameters and generate parameter summary to stdout
+    UTILS_NFSCHEMA_PLUGIN (
+        workflow,
+        params.validate_params,
+        null
+    )
+    
+    // Check config provided to the pipeline
+    UTILS_NFCORE_PIPELINE (
+        [] as List  // nextflow_cli_args (empty for now)
+    )
+    
+    // Create SRA IDs channel from params.input
+    // Check if params.input is a file or a comma-separated string
+    def sra_ids_ch
+    
+    // Check if params.input contains commas (likely a comma-separated string)
+    if (params.input.contains(',')) {
+        // Comma-separated string of SRA IDs
+        def ids = params.input.tokenize(',').collect { id -> id.trim() }
+        sra_ids_ch = channel.of(ids)
+    } else {
+        // Try to treat as file path (one SRA ID per line)
+        def input_path = file(params.input)
+        if (input_path.exists()) {
+            // File exists - read line by line
+            sra_ids_ch = channel.fromPath(params.input)
+                .splitText()
+                .map { line -> 
+                    "${line}".trim()
+                }
+                .filter { line -> 
+                    line && !line.startsWith('#')
+                }
+        } else {
+            // File doesn't exist - treat as single SRA ID string
+            // Validate it's a valid SRA ID format using regex
+            // Use ==~ for exact match (entire string must match pattern)
+            if (!(params.input ==~ /^SRR\d+$/)) {
+                exit 1, "ERROR: Invalid SRA ID format: ${params.input}. Expected format: SRR followed by digits (e.g., SRR123456)"
+            }
+            sra_ids_ch = channel.of(params.input.trim())
+        }
+    }
+    
+    //
+    // RUN MAIN WORKFLOW
+    //
+    def fastqfetcher_results = FASTQFETCHER(sra_ids_ch)
+    
+    //
+    // PIPELINE COMPLETION
+    // Handles completion emails, summaries, and notifications
+    //
+    // Collect MultiQC report (PIPELINE_COMPLETION expects a channel)
 
-    //
-    // WORKFLOW: Run main workflow
-    //
-    NFCORE_FASTQFETCHER (
-        PIPELINE_INITIALISATION.out.samplesheet
-    )
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
     PIPELINE_COMPLETION (
         params.email,
         params.email_on_fail,
@@ -93,12 +102,12 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_FASTQFETCHER.out.multiqc_report
+        fastqfetcher_results.multiqc_report
     )
+    
+    // Print summary
+    fastqfetcher_results.fastq_files
+        .view { file -> "Downloaded and converted: $file" }
 }
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
+

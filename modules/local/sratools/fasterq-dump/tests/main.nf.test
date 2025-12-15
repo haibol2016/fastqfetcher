@@ -13,7 +13,7 @@ nextflow_process {
             script "../../prefetch/main.nf"
             process {
                 """
-                input[0] = Channel.of([ [id: "SRR13255544", sra_id: "SRR13255544"], "SRR13255544" ])    // tuple val(meta), val(sra_id)
+                input[0] = Channel.of([[id: "SRR13255544", sra_id: "SRR13255544"], "SRR13255544" ])    // tuple val(meta), val(sra_id)
                 """
             }
         }

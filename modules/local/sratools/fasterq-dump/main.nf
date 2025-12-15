@@ -2,7 +2,7 @@
  * SRA Toolkit fasterq-dump - Convert SRA files to FASTQ.gz
  * 
  * This module converts SRA files to compressed FASTQ format using fasterq-dump.
- * Supports both single-end and paired-end reads.
+ * Supports single-end (1 file), paired-end (2 files), and single-cell RNA-seq (2-4 files).
  * 
  * Documentation: https://github.com/ncbi/sra-tools/wiki/HowTo:-fasterq-dump
  */
@@ -41,32 +41,18 @@ process SRA_FASTERQDUMP {
         --outdir . \\
         ${args1}
 
-    COMPRESS_CMD="pigz"
-    COMPRESS_ARGS="-p ${task.cpus} ${args2}"
-    
-    # Compress FASTQ files to .gz using parallel compression
-    # Handle both single-end and paired-end reads
-    if [ -f "\${SRA_BASE}.fastq" ]; then
-        # Single-end reads
-        \${COMPRESS_CMD} \${COMPRESS_ARGS} "\${SRA_BASE}.fastq"
-    elif [ -f "\${SRA_BASE}_1.fastq" ] && [ -f "\${SRA_BASE}_2.fastq" ]; then
-        # Paired-end reads - compress in parallel
-        \${COMPRESS_CMD} \${COMPRESS_ARGS} "\${SRA_BASE}_1.fastq" &
-        PID1=\$!
-        \${COMPRESS_CMD} \${COMPRESS_ARGS} "\${SRA_BASE}_2.fastq" &
-        PID2=\$!
-        wait \$PID1
-        wait \$PID2
-    elif [ -f "\${SRA_BASE}_1.fastq" ]; then
-        # Only read 1 found (shouldn't happen, but handle it)
-        \${COMPRESS_CMD} \${COMPRESS_ARGS} "\${SRA_BASE}_1.fastq"
-    else
+    # Compress all FASTQ files to .gz using parallel compression
+    # Handles single-end (1 file), paired-end (2 files), and single-cell RNA-seq (2-4 files)
+    # pigz will compress all matching *.fastq files using multiple threads
+    if ! ls *.fastq 1> /dev/null 2>&1; then
         echo "ERROR: No FASTQ files generated from ${sra_file}" >&2
         exit 1
     fi
     
-    # Verify at least one compressed file exists
-    if [ ! -f "\${SRA_BASE}.fastq.gz" ] && [ ! -f "\${SRA_BASE}_1.fastq.gz" ]; then
+    pigz -p ${task.cpus} ${args2} *.fastq
+    
+    # Verify compressed files exist
+    if ! ls *.fastq.gz 1> /dev/null 2>&1; then
         echo "ERROR: No compressed FASTQ files found after conversion" >&2
         exit 1
     fi
