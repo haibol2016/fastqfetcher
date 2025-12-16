@@ -64,7 +64,7 @@
                     "help_text": "Controls the compression level for pigz when compressing FASTQ files. Range: 1 (fastest, least compression) to 9 (slowest, best compression).",
                     "fa_icon": "fas fa-compress",
                     "pattern": "^[1-9]$",
-                    "default": "5"
+                    "default": 5
                 },
                 "max_size": {
                     "type": "string",
@@ -86,7 +86,8 @@
                     "type": "string",
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
+                    "hidden": true
                 },
                 "fasta": {
                     "type": "string",
@@ -96,7 +97,8 @@
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -225,42 +227,48 @@
                     "format": "file-path",
                     "description": "Custom config file to supply to MultiQC.",
                     "help_text": "Path to a custom MultiQC configuration YAML file. See MultiQC documentation for configuration options.",
-                    "fa_icon": "fas fa-cog"
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
                 },
                 "multiqc_logo": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file.",
                     "help_text": "Path to a custom logo image file (PNG, SVG, etc.) to display in the MultiQC report. The logo file name must also be referenced in the MultiQC config file.",
-                    "fa_icon": "fas fa-image"
+                    "fa_icon": "fas fa-image",
+                    "hidden": true
                 },
                 "extra_multiqc_config": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Additional MultiQC config file (can be used alongside multiqc_config).",
                     "help_text": "Path to an additional MultiQC configuration file. This can be used to supplement or override settings from the main multiqc_config file.",
-                    "fa_icon": "fas fa-cog"
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
                 },
                 "replace_names": {
                     "type": "string",
                     "format": "file-path",
                     "description": "TSV file for replacing sample names in MultiQC report.",
                     "help_text": "Path to a TSV file with two columns (old_name, new_name) to replace sample names in the MultiQC report.",
-                    "fa_icon": "fas fa-exchange-alt"
+                    "fa_icon": "fas fa-exchange-alt",
+                    "hidden": true
                 },
                 "sample_names": {
                     "type": "string",
                     "format": "file-path",
                     "description": "TSV file for custom sample names in MultiQC report.",
                     "help_text": "Path to a TSV file mapping sample IDs to custom names for display in the MultiQC report.",
-                    "fa_icon": "fas fa-tags"
+                    "fa_icon": "fas fa-tags",
+                    "hidden": true
                 },
                 "multiqc_methods_description": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "help_text": "Path to a YAML file containing HTML content for a methods description section in the MultiQC report.",
-                    "fa_icon": "fas fa-cog"
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
                 },
                 "validate_params": {
                     "type": "boolean",
