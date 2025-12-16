@@ -1,4 +1,4 @@
-# nf-core/fastqfetcher: Citations
+# haibol2016/fastqfetcher: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

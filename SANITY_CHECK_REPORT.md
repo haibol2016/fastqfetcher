@@ -1,7 +1,7 @@
 # Pipeline Sanity Check Report
 
 **Date:** $(date)
-**Pipeline:** nf-core/fastqfetcher
+**Pipeline:** haibol2016/fastqfetcher
 **Nextflow Version:** 25.10.2
 
 ## ✅ PASSED CHECKS

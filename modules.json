@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/fastqfetcher",
-    "homePage": "https://github.com/nf-core/fastqfetcher",
+    "name": "haibol2016/fastqfetcher",
+    "homePage": "https://github.com/haibol2016/fastqfetcher",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

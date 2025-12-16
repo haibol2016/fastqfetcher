@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/fastqfetcher/master/nextflow_schema.json",
-    "title": "nf-core/fastqfetcher pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/haibol2016/fastqfetcher/master/nextflow_schema.json",
+    "title": "haibol2016/fastqfetcher pipeline parameters",
     "description": "A simple, yet efficient workflow to download SRA data using sratools",
     "type": "object",
     "$defs": {

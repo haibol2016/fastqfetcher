@@ -1,4 +1,4 @@
-# nf-core/fastqfetcher: Output
+# haibol2016/fastqfetcher: Output
 
 ## Introduction
 

@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/fastqfetcher pipeline
+// Subworkflow with functionality specific to the haibol2016/fastqfetcher pipeline
 //
 
 /*
