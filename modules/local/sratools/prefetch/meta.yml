@@ -23,8 +23,8 @@ input:
         e.g. [ id:'SRR123456', sra_id:'SRR123456' ]
   - sra_id:
       type: string
-      description: SRA accession ID (e.g., SRR123456, SRX123456, SRP123456)
-      pattern: "^[SED]R[RPX]?[0-9]+$"
+      description: SRA accession ID (e.g., SRR123456)
+      pattern: "^SRR[0-9]+$"
 output:
   - sra_files:
       type: file
