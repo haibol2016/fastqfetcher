@@ -1,66 +1,100 @@
 # haibol2016/fastqfetcher: Usage
 
-## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/fastqfetcher/usage](https://nf-co.re/fastqfetcher/usage)
-
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+The **haibol2016/fastqfetcher** pipeline downloads SRA data from NCBI and converts it to compressed FASTQ format, then performs quality control analysis. This pipeline is designed to work with SRA accession IDs rather than pre-existing FASTQ files.
 
-## Samplesheet input
+## Input specification
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+The pipeline accepts SRA run accession IDs in three different formats:
+
+### Option 1: File containing SRA run accessions
+
+Create a text file with one SRA run accession per line:
+
+```txt title="srr.accessions.txt"
+SRR13255544
+SRR36447178
+SRR36432525
+SRR33368650
+```
+
+Each row represents a single SRA run accession. Lines starting with `#` are treated as comments and will be ignored.
+
+Then specify the file path using:
 
 ```bash
---input '[path to samplesheet file]'
+--input 'srr.accessions.txt'
 ```
 
-### Multiple runs of the same sample
+### Option 2: Comma-separated SRA run accessions
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+Provide multiple SRA run accessions directly as a comma-separated string:
 
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+```bash
+--input 'SRR13255544,SRR36447178,SRR36432525,SRR33368650'
 ```
 
-### Full samplesheet
+### Option 3: Single SRA run accession
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+Provide a single SRA run accession:
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+```bash
+--input 'SRR13255544'
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+### Input format details
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+- **SRA Run Accession Format**: The pipeline expects SRA run accessions in the format `SRR` followed by digits (e.g., `SRR123456`)
+- **Automatic Detection**: The pipeline automatically detects whether the input is a file path or a direct SRA ID
+- **File Validation**: If a file path is provided, the pipeline validates that the file exists before processing
+- **Format Validation**: Single SRA IDs are validated to ensure they match the expected format
+
+The pipeline will download the corresponding SRA files, convert them to FASTQ format, compress them, and perform quality control analysis.
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run haibol2016/fastqfetcher --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run haibol2016/fastqfetcher \
+   --input srr.accessions.txt \
+   --outdir ./results \
+   -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+
+### Basic usage examples
+
+**Single SRA accession:**
+
+```bash
+nextflow run haibol2016/fastqfetcher \
+   --input SRR13255544 \
+   --outdir ./results \
+   -profile docker
+```
+
+**Multiple SRA accessions (comma-separated):**
+
+```bash
+nextflow run haibol2016/fastqfetcher \
+   --input SRR13255544,SRR36447178,SRR36432525 \
+   --outdir ./results \
+   -profile docker
+```
+
+**From file:**
+
+```bash
+nextflow run haibol2016/fastqfetcher \
+   --input srr.accessions.txt \
+   --outdir ./results \
+   -profile docker
+```
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -87,10 +121,12 @@ nextflow run haibol2016/fastqfetcher -profile docker -params-file params.yaml
 with:
 
 ```yaml title="params.yaml"
-input: './samplesheet.csv'
+input: 'srr.accessions.txt'
 outdir: './results/'
-genome: 'GRCh37'
-<...>
+ngc_path: '/path/to/prj_XXXXX.ngc'  # Optional: for dbGaP data
+max_size: '50G'                      # Optional: max download size
+disk_limit: '100G'                   # Optional: disk limit for conversion
+pgzip_compress_level: '5'            # Optional: compression level (1-9)
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
@@ -153,7 +189,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
-  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow `24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
@@ -165,13 +201,13 @@ You can also supply a run name to resume a specific run: `-resume [run-name]`. U
 
 ### `-c`
 
-Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/usage/configuration) for more information.
+Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/docs/usage/configuration) for more information.
 
 ## Custom configuration
 
 ### Resource requests
 
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
+Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the [error codes specified in the base config](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
 To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 

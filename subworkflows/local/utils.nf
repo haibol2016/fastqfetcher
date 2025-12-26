@@ -205,6 +205,10 @@ def toolCitationText() {
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
+            "SRA Tools (NCBI),",
+            "prefetch (NCBI),",
+            "pigz (Madler 2022),",
+            "fasterq-dump (NCBI),",
             "FastQC (Andrews 2010),",
             "MultiQC (Ewels et al. 2016)",
             "."

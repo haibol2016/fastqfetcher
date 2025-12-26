@@ -9,8 +9,7 @@
 
 process SRA_FASTERQDUMP {
     tag "${meta.id}"
-    label 'process_medium'
-    publishDir "${params.outdir}/fastq", mode: 'copy', pattern: '*.fastq.gz'
+    label 'process_high'
 
     // Conda environment or container
     conda "${moduleDir}/environment.yml"

@@ -160,7 +160,7 @@
             },
             "url": [
                 "https://github.com/haibol2016/fastqfetcher",
-                "https://nf-co.re/fastqfetcher/dev/"
+                "https://github.com/haibol2016/fastqfetcher/dev/"
             ],
             "version": [
                 "1.0.0dev"
