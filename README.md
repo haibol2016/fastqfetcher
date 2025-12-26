@@ -202,6 +202,17 @@ nextflow run haibol2016/fastqfetcher \
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
+>[!WARNING]
+> The `disk_limit` parameter controls the maximum disk space that fasterq-dump can use during FASTQ conversion. If not specified, it defaults to the memory size allocated to the process. For large SRA files, ensure you set `disk_limit` to a value sufficient to handle the conversion (typically 2-3x the size of the SRA file). Insufficient disk space may cause the conversion to fail. For instance:
+
+```bash
+nextflow run haibol2016/fastqfetcher \
+   -profile docker \
+   --input SRR13255544 \
+   --disk_limit 128G \
+   --outdir ./results
+```
+
 For more details and further functionality, please refer to the [usage documentation](docs/usage.md) and the [parameter documentation](https://github.com/haibol2016/fastqfetcher/blob/main/nextflow_schema.json).
 
 ## Pipeline output
