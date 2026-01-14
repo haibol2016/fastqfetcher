@@ -20,7 +20,7 @@
 
 ## Introduction
 
-**haibol2016/fastqfetcher** is a bioinformatics pipeline that can be used to download NGS fastq files from Short Read Archive (SRA) and perform FastQC/MultiQC. It takes one SRA run accession (such as SRR36455892), multiple comma-separated SRA run accessions, or a text file with one SRA run accession per line as input. It downloads **.sra files**, converts .sra files to **.fastq files**, which are further compressed into **.fastq.gz files**, performs raw read quality control and generates a friendly report using FastQC and MultiQC.
+**haibol2016/fastqfetcher** is a bioinformatics pipeline that can be used to download NGS fastq files from Short Read Archive (SRA) and perform FastQC/MultiQC. It takes one SRA run accession (such as SRR36455892), multiple comma-separated SRA run accessions, or a text file with one SRA run accession per line as input. It downloads **.sra files**, converts .sra files to **.fastq files**, which are further compressed into **.fastq.gz files**, performs raw read quality control and generates a friendly report using FastQC and MultiQC. Mulitple Nextflow profiles are preconfigured, including LSF, docker, singularity, AWS Batch (you need to provide your own AWS resource information). 
 
 <img src="docs/images/workflow_diagram.svg" alt="Workflow diagram" width="600"/>
 
@@ -55,7 +55,7 @@ Now, you can run the pipeline using:
 
 ```bash
 nextflow run haibol2016/fastqfetcher \
-   -profile <docker/singularity/.../institute> \
+   -profile <docker/singularity/.../aws/lsf> \
    --input srr.accessions.txt \
    --outdir work
 ```
@@ -66,7 +66,7 @@ Another way to specify input is to provide SRA run accessions directly through t
 
 ```bash
 nextflow run haibol2016/fastqfetcher \
-   -profile <docker/singularity/.../institute> \
+   -profile <docker/singularity/.../aws/lsf> \
    --input  SRR13255544,SRR36447178,SRR36432525,SRR33368650 \
    --outdir work
 ```
@@ -109,7 +109,7 @@ Or with comma-separated SRA IDs:
 
 ```bash
 nextflow run haibol2016/fastqfetcher \
-   -profile <docker/singularity/.../institute> \
+   -profile <docker/singularity/.../lsf/aws> \
    --input SRR13255544,SRR36447178 \
    --ngc_path /path/to/your/prj_XXXXX.ngc \
    --outdir work
